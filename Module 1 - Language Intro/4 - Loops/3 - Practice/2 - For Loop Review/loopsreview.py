@@ -77,4 +77,3 @@ for things in stuff:
     new_stuff.append(things)
 
 print(new_stuff)
-

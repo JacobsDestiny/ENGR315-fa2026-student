@@ -13,10 +13,12 @@ Note that Elon's capital will be $33B.
 """
 
 ### all your code below ###
-
-
+ten_year_final = 33_000_000_000 * (1 + 0.0396) ** 10
+print(ten_year_final)
+twenty_year_final = 33_000_000_000 * (1 + 0.0432) ** 20
+print(twenty_year_final)
 # final answer for 10-year
-ten_year_final = None
+ten_year_final = 48660509081.78675
 
 # final answer for 20-year
-twenty_year_final = None
+twenty_year_final = 76889229275.98897

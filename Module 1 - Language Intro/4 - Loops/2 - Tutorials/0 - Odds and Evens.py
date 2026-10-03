@@ -16,7 +16,12 @@ one_odds = 0
 
 # Fill in this loop:
 for element in list_one:
-    dummy = None
+    dummy = element
+    dummy = dummy % 2
+    if dummy == 0:
+        one_evens += 1
+    else:
+        one_odds += 1
 
 # These statements can be used to check your work!
 print("The number of odds in list_one is: " + str(one_odds))
