@@ -1,5 +1,8 @@
+
 import numpy as np
+from scipy.signal import find_peaks
 from ekg_testbench import EKGTestBench
+
 
 def detect_heartbeats(filepath):
     """
@@ -8,46 +11,47 @@ def detect_heartbeats(filepath):
     :return: signal: a signal that will be plotted
     beats: the indices of detected heartbeats
     """
+
     if filepath == '':
         return list()
 
-    # import the CSV file using numpy
-    path = filepath
+    # Load the CSV file and skip the first two rows
+    data = np.loadtxt(filepath, delimiter=',', skiprows=2)
 
-    # load data in matrix from CSV file; skip first two rows
-    ## your code here
+    # Save each column as its own variable
+    time = data[:, 0]
+    channel_1 = data[:, 1]
+    channel_2 = data[:, 2]
 
-    # save each vector as own variable
-    ## your code here
+    # Select the EKG channel to process
+    signal = channel_1
 
-    # identify one column to process. Call that column signal
+    # Differentiate the signal
+    differentiated = np.diff(signal, prepend=signal[0])
 
-    signal = -1 ## your code here
+    # Square the differentiated values
+    squared = differentiated ** 2
 
-    # pass data through LOW PASS FILTER (OPTIONAL)
-    ## your code here
+    # Apply a moving average window
+    window_size = 30
+    window = np.ones(window_size) / window_size
+    averaged = np.convolve(squared, window, mode='same')
 
-    # pass data through HIGH PASS FILTER (OPTIONAL) to create BAND PASS result
-    ## your code here
+    # Calculate a threshold for detecting peaks
+    threshold = np.mean(averaged) + 0.5 * np.std(averaged)
 
-    # pass data through differentiator
-    ## your code here
-
-    # pass data through square function
-    ## your code here
-
-    # pass through moving average window
-    ## your code here
-
-    # use find_peaks to identify peaks within averaged/filtered data
-    # save the peaks result and return as part of testbench result
-
-    ## your code here peaks,_ = find_peaks(....)
-
-    beats = None
-
-    # do not modify this line
+    # Identify peaks in the processed signal
+    peaks, _ = find_peaks(
+    averaged,
+    height=threshold,
+    distance=100,
+    prominence=0.5 * np.std(averaged)
+    )
+    beats = peaks
+    signal = averaged
+    # Do not modify this line
     return signal, beats
+
 
 
 # when running this file directly, this will execute first
